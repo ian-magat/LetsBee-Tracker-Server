@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SMS</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
+    <link href="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/bootstrap-table@1.18.1/dist/bootstrap-table.min.js"></script>
+    <script
+        src="https://unpkg.com/bootstrap-table@1.18.1/dist/extensions/auto-refresh/bootstrap-table-auto-refresh.min.js"></script>
+
+</head>
+
+<body>
+
+    <table id="table" data-show-refresh="true" data-auto-refresh="true" data-pagination="true"
+        data-auto-refresh-interval="2" data-url="http://192.168.100.16:3001/" data-side-pagination="client">
+        <thead>
+            <tr>
+                <th data-field="id" data-sortable="true">Id</th>
+                <th data-field="message" data-sortable="true">message</th>
+                <th data-field="number" data-sortable="true">number</th>
+                <th data-field="status" data-sortable="true">status</th>
+            </tr>
+        </thead>
+    </table>
+
+    <script>
+        $(function () {
+            $('#table').bootstrapTable()
+        })
+    </script>
+</body>
+
+</html>

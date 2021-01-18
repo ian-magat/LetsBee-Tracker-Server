@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Let's Bee - Admin</title>
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="./assets/img/favicon-32x32.png" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-primary">
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-7">
+                            <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header">
+                                    <h3 class="text-center font-weight-light my-4">Create Account</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="firstName">First Name</label>
+                                                    <input class="form-control py-4" id="firstName" name="firstName"
+                                                        type="text" placeholder="Enter first name" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="lastName">Last Name</label>
+                                                    <input class="form-control py-4" id="lastName" name="lastName"
+                                                        type="text" placeholder="Enter last name" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="userName">Username</label>
+                                                    <input class="form-control py-4" id="userName" name="userName"
+                                                        type="text" placeholder="Enter email address" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="branch">Branch</label>
+                                                    <select class="form-control" id="branch" name="branch">
+                                                        <option value="" selected disabled hidden>Choose here</option>
+                                                        <option value="Angeles">Angeles</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="password">Password</label>
+                                                    <input class="form-control py-4" id="password" name="password"
+                                                        type="password" placeholder="Enter password" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="small mb-1" for="confirmPass">Confirm
+                                                        Password</label>
+                                                    <input class="form-control py-4" id="confirmPass" name="confirmPass"
+                                                        type="password" placeholder="Confirm password" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-4 mb-0"><a class="btn btn-primary btn-block" href="#"
+                                                id="btnCreateAccount" type="submit">Create Account</a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <div class="small"><a href="login.html">Have an account? Go to login</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <div id="layoutAuthentication_footer">
+            <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-muted">Copyright &copy; Let's Bee 2020</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let endpoint = `http://18.162.55.201:3000/api/allLocation`
+            return fetch(endpoint)
+                .then(res => res.json())
+                .then(data => {
+                    data.forEach(function (e, i) {
+                        $('#inputBranch').append($('<option></option>').val(e.name).text(e.name));
+                    });
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#btnCreateAccount").click(function (e) {
+                e.preventDefault();
+                if (!$("#firstName").val()) {
+                    toastr.error("First Name is required")
+                    return
+                }
+                if (!$("#lastName").val()) {
+                    toastr.error("Last Name is required")
+                    return
+                }
+                if (!$("#userName").val()) {
+                    toastr.error("Username is required")
+                    return
+                }
+                if (!$("#password").val()) {
+                    toastr.error("Password is required")
+                    return
+                }
+                if (!$("#confirmPass").val()) {
+                    toastr.error("Confirm your password")
+                    return
+                }
+                if ($("#confirmPass").val() != $("#password").val()) {
+                    toastr.error("password do not match")
+                    return
+                }
+
+                if (!$("#branch").val()) {
+                    toastr.error("Branch is required")
+                    return
+                }
+                window.setTimeout(function () {
+                    window.location.href = 'login.html';
+                }, 2000);
+
+                registerAccount();
+
+            });
+
+            function registerAccount() {
+                const myHeaders = new Headers({
+                    'Content-Type': 'application/json',
+                    'Authorization': `bearer ${sessionStorage.getItem('token')}` 
+                });
+                let firstName = $("#firstName").val();
+                let lastName = $("#lastName").val();
+                let userName = $("#userName").val();
+                let password = $("#password").val();
+                let branch = $("#branch").val();
+                let data = { firstName: `${firstName}`, lastName: `${lastName}`, userName: `${userName}`, password: `${password}`, branch: `${branch}` }
+                fetch('http://192.168.100.16:3000/api/saveUser', {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: myHeaders
+
+                }).then(() => {
+                    toastr.success('Registered!');
+                }).catch(err => {
+                    console.log(err);
+                })
+            }
+
+        });
+
+
+    </script>
+
+
+    <script src="js/scripts.js"></script>
+</body>
+
+</html>
