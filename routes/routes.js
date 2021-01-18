@@ -6,6 +6,11 @@ const AuthController = require('../controllers/AuthController');
 const UserController = require('../controllers/UserController');
 const {validateUser} = require('../helper/validator');
 const upload = require('../services/file-upload');
+
+const ItemsController = require('../controllers/ItemsController');
+
+
+
 const singleUpload = upload.single('image');
 
 app.use(express.json());
@@ -20,7 +25,10 @@ app.use(cors());
     });
   })
   
-router.get('/',Controller.getAll)
+router.get('/',ItemsController.getAll)
+router.get('/api/getBatchItems/:batchNo',ItemsController.getitems);
+
+
 router.post('/api/GetSMSbyDate',Controller.getAllbyDate)
 router.get('/api/inboundSMS',Controller.inboundSMS)
 router.get('/api/outboundSMS',Controller.outboundSMS)

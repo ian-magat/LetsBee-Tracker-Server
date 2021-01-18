@@ -32,7 +32,7 @@ const sequelize = new Sequelize(
   db.Sequelize = Sequelize;
   db.sequelize = sequelize;
 
-  db.SMS = require("../models/SMS.model")(sequelize, Sequelize);
   db.users = require("../models/Users.model")(sequelize, Sequelize);
+  db.Items = require("../models/Items.model")(sequelize, Sequelize);
 
   module.exports = db;

@@ -11,7 +11,7 @@ module.exports = {
     HOST: 'localhost',
     USER:'root',
     PASSWORD: '',
-    DB: 'letsbeesms',
+    DB: 'DB_letsbee-Tracker',
 
     dialect: "mysql",
     pool: {
