@@ -10,6 +10,8 @@ const path = require('path')
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const moment = require('moment');
+const csv = require("fast-csv");
+const fs = require("fs");
 
 const sendSMS = (req, res) => {
 
@@ -68,36 +70,6 @@ async function  refresh(){
   });
 
  }
-//get all batches
-const getAll = (req, res) => {
-  db.Items.findAll({
-    group: ['batch_num'],
-   order: [
-     ['id', 'DESC'],
- ],
-  }).then(x => {
-     console.log(x);
-    res.send(x);
-     
-   }).catch(err => console.log('error' + err));
-
- }
-//get batch items
-
-
-const getitems = (req, res) => {
-  db.Items.findAll({
-    where: {
-      batch_num: req.params.batchNo
-    },
-   order: [
-     ['item_no', 'ASC'],
- ],
-  }).then((data) => {
-    res.send(data);
-  }).catch(err => console.log(err));
-
-}
 
  const { Op } = require('sequelize');
  const getAllbyDate = (req, res) => {
@@ -203,10 +175,191 @@ const deleteSMS = (req, res) => {
 
 }
 
+//get all batches
+const getAll = (req, res) => {
+  db.Items.findAll({
+    group: ['batch_num'],
+   order: [
+     ['id', 'DESC'],
+ ],
+  }).then(x => {
+     console.log(x);
+    res.send(x);
+     
+   }).catch(err => console.log('error' + err));
+
+ }
+//get batch items
+const getitems = (req, res) => {
+  db.Items.findAll({
+    where: {
+      batch_num: req.params.batchNo
+    },
+   order: [
+     ['item_no', 'ASC'],
+ ],
+  }).then((data) => {
+    res.send(data);
+  }).catch(err => console.log(err));
+
+}
+
+//get batch items
+const getAllItems = (req, res) => {
+  db.Items.findAll()
+  .then((data) => res.send(data))
+
+}
+
+// GET ITEM
+const getItem = (req, res) => {
+  db.Items.findAll({ 
+    where: { id: req.params.ItemId } })
+    .then((Item) => res.send(Item))
+    .catch((err) => console.log(err));
+};
+
+
+// POST Item
+// Add Item
+const postAddItem = (req, res, next) => {
+  let {
+    item_no,
+    sender,
+    sender_payment,
+    receiver,
+    receiver_payment,
+    tracking_num,
+    batch_num,
+    phone_number,
+    declared_item,
+    weight,
+    dimensions,
+    quantity,
+    current_location,
+  } = req.body;
+
+  db.Items.create({
+    item_no,
+    sender,
+    sender_payment,
+    receiver,
+    receiver_payment,
+    tracking_num,
+    batch_num,
+    phone_number,
+    declared_item,
+    weight,
+    dimensions,
+    quantity,
+    current_location,
+  }).then((result) => {
+    res.send(result);
+  });
+};
+
+
+
+// delete item with id
+ const deleteItemId = (req, res) => {
+  db.Items.destroy({ where: { id: req.params.ItemId } })
+    .then((status => res.sendStatus(200)))
+    .catch(err => console.log(err));
+};
+
+// GET edit item
+const getEditItem = (req, res, next) => {
+  // const itemId = req.params.ItemId;
+  db.Items.findAll({ where: { id: req.params.ItemId } })
+    .then((item) => res.send(item))
+    .catch((err) => console.log(err));
+};
+
+// POST edit item
+const postEditItem = (req, res, next) => {
+  const itemId = req.params.ItemId;
+  db.Items.findOne({ where: { id: itemId } })
+    .then((item) => {
+      if (!item) {
+        const error = new Error("Item not found.");
+        error.statusCode = 404;
+        throw error;
+      }
+      item.item_no = req.body.item_no;
+      item.sender = req.body.sender;
+      item.sender_payment = req.body.sender_payment;
+      item.receiver = req.body.receiver;
+      item.receiver_payment = req.body.receiver_payment;
+      item.phone_number = req.body.phone_number;
+      item.tracking_num = req.body.tracking_num;
+      item.batch_num = req.body.batch_num;
+      item.weight = req.body.weight;
+      item.dimensions = req.body.dimensions;
+      item.quantity = req.body.quantity;
+      item.declared_item = req.body.declared_item;
+      item.current_location = req.body.current_location;
+      // item.userId = req.body.userId;
+      return item.save();
+    })
+    .then((item) => res.send(item))
+    // .then((result) => {
+    //   res.status(200).json({ message: "updated." });
+    // })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+};
+
+// 
+const getBatchesList = (req, res, next) => {
+  db.Items.findAll({
+    attributes: ["batch_num"],
+    group: ["batch_num"],
+  }).then((Item) => res.send(Item));
+};
+
+
+// Upload Endpoint
+
+const uploadFile = async (req, res) => {
+  var filePath = "/Users/jdm0126/Documents/trackerApp/tracking_be/LetsBee-Tracker-Server";
+  if (req.files === null) {
+    return res.status(400).json({ msg: "No file uploaded" });
+  }
+  const results = [];
+  const file = req.files.file;
+
+  file.mv(`${filePath}/public/uploads/${file.name}`, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json(err);
+    }
+    res.json({ fileName: file.name, filePath: `/public/uploads/${file.name}` });
+  });
+
+  fs.createReadStream(`${filePath}/public/uploads/${file.name}`)
+    .pipe(csv.parse({ headers: true }))
+    .on("data", (row) => results.push(row))
+    .on("end", () => {
+      db.Items.bulkCreate(results);
+    });
+};
+
 
 module.exports = {
   getAll,
   getitems,
+  getItem,
+  getAllItems,
+  deleteItemId,
+  getEditItem,
+  getBatchesList,
+  postEditItem,
+  uploadFile,
+  postAddItem,
 
   inboundSMS,
   deleteSMS,
