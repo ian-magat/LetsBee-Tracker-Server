@@ -204,6 +204,13 @@ const getitems = (req, res) => {
 
 }
 
+//get batch items
+const getAllItems = (req, res) => {
+  db.Items.findAll()
+  .then((data) => res.send(data))
+
+}
+
 // GET ITEM
 const getItem = (req, res) => {
   db.Items.findAll({ 
@@ -346,6 +353,7 @@ module.exports = {
   getAll,
   getitems,
   getItem,
+  getAllItems,
   deleteItemId,
   getEditItem,
   getBatchesList,
