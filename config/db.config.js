@@ -10,7 +10,7 @@ module.exports = {
     // // LOCAL
     HOST: 'localhost',
     USER:'root',
-    PASSWORD: '',
+    PASSWORD: '12345678',
     DB: 'DB_letsbee-Tracker',
 
     dialect: "mysql",
