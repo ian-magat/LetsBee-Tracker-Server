@@ -98,6 +98,71 @@ const getitems = (req, res) => {
   }).catch(err => console.log(err));
 
 }
+//update status
+const updateStatus = (req, res) => {
+  let status = req.body.status;
+  db.Items.update({
+    current_location: status,
+  }, {
+    where: {
+      batch_num: req.params.batchNo
+    }
+  }).then(() => {
+    res.sendStatus(200);
+  }).catch(err => console.log(err));
+
+}
+//update Items
+const updateItem = (req, res) => {
+
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+
+      let item_no = req.body.item_no;
+      let sender = req.body.sender;
+      let sender_payment = req.body.sender_payment;
+      let receiver = req.body.receiver;
+      let receiver_payment = req.body.receiver_payment;
+      let phone_number = req.body.phone_number;
+      let declared_item = req.body.declared_item;
+      let weight = req.body.weight;
+      let dimensions = req.body.dimensions;
+      let quantity = req.body.quantity;
+
+      db.Items.update({
+        item_no: item_no,
+        sender: sender,
+        sender_payment: sender_payment,
+        receiver: receiver,
+        receiver_payment: receiver_payment,
+        phone_number: phone_number,
+        declared_item: declared_item,
+        weight: weight,
+        dimensions: dimensions,
+        quantity: quantity,
+      }, {
+        where: {
+          id: req.params.id
+        }
+      }).then(() => {
+        res.sendStatus(200);
+      }).catch(err => console.log(err));
+
+    }
+  })
+}
+
+//delete item
+const deleteItem = (req, res) => {
+  db.Items.destroy({
+    where: {
+      id: req.params.id
+    }
+  }).then(() => res.sendStatus(200)).catch(err => console.log(err));
+
+}
 
  const { Op } = require('sequelize');
  const getAllbyDate = (req, res) => {
@@ -176,23 +241,7 @@ const outboundSMS = (req, res) => {
   }).catch(err => console.log('error' + err));
 }
 
-const updateStatus = (req, res) => {
-  let status = req.body.status;
-  db.SMS.update({
-    status: status,
-  }, {
-    where: {
-      id: req.params.id
-    }
-  }).then(() => {
-    let ref = refresh();
-    ref.then((data) => 
-      global.io.emit('reload',data)
-    )
-    res.sendStatus(200);
-  }).catch(err => console.log(err));
 
-}
 
 const deleteSMS = (req, res) => {
   db.SMS.destroy({
@@ -207,6 +256,8 @@ const deleteSMS = (req, res) => {
 module.exports = {
   getAll,
   getitems,
+  updateItem,
+  deleteItem,
 
   inboundSMS,
   deleteSMS,

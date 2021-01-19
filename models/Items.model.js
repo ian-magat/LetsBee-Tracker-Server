@@ -42,7 +42,8 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       current_location: {
-          type: Sequelize.STRING
+          type: Sequelize.STRING,
+          defaultValue: '0'
       }
     }, {
         freezeTableName: true,

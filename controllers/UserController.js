@@ -71,10 +71,6 @@ const updateProfile = (req, res) => {
 
     }
   })
-
-
-
-
 }
 const updateUser = (req, res) => {
 

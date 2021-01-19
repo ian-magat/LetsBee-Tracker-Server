@@ -27,6 +27,11 @@ app.use(cors());
   
 router.get('/',ItemsController.getAll)
 router.get('/api/getBatchItems/:batchNo',ItemsController.getitems);
+router.post('/api/updateStatus/:batchNo',ItemsController.updateStatus);
+router.post('/api/updateItem/:id',verifyToken,ItemsController.updateItem);
+router.delete('/api/deleteItem/:id',ItemsController.deleteItem)
+
+
 
 
 router.post('/api/GetSMSbyDate',Controller.getAllbyDate)
@@ -35,7 +40,6 @@ router.get('/api/outboundSMS',Controller.outboundSMS)
 router.post('/api/sendSMS',verifyToken,Controller.sendSMS)
 
 
-router.post('/api/updateStatus/:id',Controller.updateStatus);
 router.delete('/api/deleteRider/:id',Controller.deleteSMS)
 router.get('/api/allUsers',UserController.getAllUser)
 router.post('/api/saveUser',verifyToken,UserController.SaveUser);
