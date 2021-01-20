@@ -164,6 +164,19 @@ const deleteItem = (req, res) => {
 
 }
 
+//save bulk records
+
+function saveBulkItems(req, res) {
+
+  let data = req.body;
+
+  db.Items.bulkCreate(data).then(() => { // Notice: There are no arguments here, as of right now you'll have to...
+    return db.Items.findAll();
+  }).then(Items => {
+    console.log(Items) // ... in order to get the array of user objects
+  })
+
+}
  const { Op } = require('sequelize');
  const getAllbyDate = (req, res) => {
 
@@ -258,6 +271,7 @@ module.exports = {
   getitems,
   updateItem,
   deleteItem,
+  saveBulkItems,
 
   inboundSMS,
   deleteSMS,

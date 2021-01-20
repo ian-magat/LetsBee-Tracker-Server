@@ -30,6 +30,7 @@ router.get('/api/getBatchItems/:batchNo',ItemsController.getitems);
 router.post('/api/updateStatus/:batchNo',ItemsController.updateStatus);
 router.post('/api/updateItem/:id',verifyToken,ItemsController.updateItem);
 router.delete('/api/deleteItem/:id',ItemsController.deleteItem)
+router.post('/api/saveImportedData',ItemsController.saveBulkItems);
 
 
 
