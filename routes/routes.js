@@ -24,10 +24,10 @@ app.use(cors());
     });
   })
   
-router.get('/',ItemsController.getAll)
+// router.get('/',ItemsController.getAll)
 router.get('/api/item', ItemsController.getAllItems);
 router.get('/api/item/:ItemId', ItemsController.getItem);
-router.get('/api/getBatchItems/:batchNo',ItemsController.getitems);
+router.get('/api/getBatchItems/:batchNo',ItemsController.getItems);
 router.post('/api/updateStatus/:batchNo',ItemsController.updateStatus);
 router.post('/api/updateItem/:id',verifyToken,ItemsController.updateItem);
 router.delete('/api/deleteItem/:id',ItemsController.deleteItem)
@@ -41,7 +41,6 @@ router.get('/api/batchNum/batch', ItemsController.getBatchesList)
 router.post('/api/item/add', ItemsController.postAddItem);
 router.get('/api/edit/:ItemId', ItemsController.getEditItem);
 router.patch('/api/edit/:ItemId', ItemsController.postEditItem);
-router.delete('/api/delete/:ItemId', ItemsController.deleteItemId);
 
 router.post('/api/upload', ItemsController.uploadFile);
 

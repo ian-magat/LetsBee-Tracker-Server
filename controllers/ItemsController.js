@@ -71,12 +71,7 @@ async function  refresh(){
 
  }
 //get all batches
-const getAll = (req, res) => {
-
-  db.sequelize.query('CALL sp_allBatch();').then(function(response){
-    res.send(response);
-   }).catch(err => send('error' + err));
-
+// const getAll = (req, res) => {
 //   db.Items.findAll({
 //     group: ['batch_num'],
 //    order: [
@@ -88,11 +83,11 @@ const getAll = (req, res) => {
      
 //    }).catch(err => console.log('error' + err));
 
- }
+//  }
 //get batch items
 
 
-const getitems = (req, res) => {
+const getItems = (req, res) => {
   db.Items.findAll({
     where: {
       batch_num: req.params.batchNo
@@ -282,14 +277,6 @@ const postAddItem = (req, res, next) => {
 };
 
 
-
-// delete item with id
- const deleteItemId = (req, res) => {
-  db.Items.destroy({ where: { id: req.params.ItemId } })
-    .then((status => res.sendStatus(200)))
-    .catch(err => console.log(err));
-};
-
 // GET edit item
 const getEditItem = (req, res, next) => {
   // const itemId = req.params.ItemId;
@@ -374,14 +361,13 @@ const uploadFile = async (req, res) => {
 
 module.exports = {
   getAll,
-  getitems,
+  getItems,
   updateItem,
   deleteItem,
   saveBulkItems,
   getBatchLastNo,
   getItem,
   getAllItems,
-  deleteItemId,
   getEditItem,
   getBatchesList,
   postEditItem,
