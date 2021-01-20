@@ -177,6 +177,19 @@ function saveBulkItems(req, res) {
   })
 
 }
+
+//get batch last item
+const getBatchLastNo = (req, res) => {
+  db.Items.findOne({
+    where: {
+      batch_num: req.params.batchNo
+    } ,
+    order: [ [ 'id', 'DESC' ]],
+}).then((data) => {
+    res.send(`${data.item_no}`);
+  }).catch(err => res.send('0'));
+}
+
  const { Op } = require('sequelize');
  const getAllbyDate = (req, res) => {
 
@@ -272,6 +285,7 @@ module.exports = {
   updateItem,
   deleteItem,
   saveBulkItems,
+  getBatchLastNo,
 
   inboundSMS,
   deleteSMS,
