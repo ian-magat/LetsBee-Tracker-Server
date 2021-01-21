@@ -70,16 +70,21 @@ async function  refresh(){
  }
 //get all batches
 const getAll = (req, res) => {
-  db.Items.findAll({
-    group: ['batch_num'],
-   order: [
-     ['id', 'DESC'],
- ],
-  }).then(x => {
-     console.log(x);
-    res.send(x);
+
+  db.sequelize.query('CALL sp_allBatch();').then(function(response){
+    res.send(response);
+   }).catch(err => send('error' + err));
+
+//   db.Items.findAll({
+//     group: ['batch_num'],
+//    order: [
+//      ['id', 'DESC'],
+//  ],
+//   }).then(x => {
+//      console.log(x);
+//     res.send(x);
      
-   }).catch(err => console.log('error' + err));
+//    }).catch(err => console.log('error' + err));
 
  }
 //get batch items
@@ -189,94 +194,7 @@ const getBatchLastNo = (req, res) => {
     res.send(`${data.item_no}`);
   }).catch(err => res.send('0'));
 }
-
- const { Op } = require('sequelize');
- const getAllbyDate = (req, res) => {
-
-  let from = moment(req.body.from).format('YYYY-MM-DD');
-  let to = moment(req.body.to).format('YYYY-MM-DD');
-switch(req.body.type)
-{
-  case "inbound":
-  case "outbound" :
-  
-    db.SMS.findAll({
-      where: {
-        createdAt: {
-          [Op.between]: [`${from}T00:00:00.000Z`, `${to}T00:00:00.000Z`]
-        },
-        type: req.body.type
-      } ,
-     order: [
-       ['id', 'DESC'],
-   ],
-    }).then(x => {
-       console.log(x);
-      res.send(x);
-       
-     }).catch(err => console.log('error' + err));
-  return;
-
-  case "all" :
-  db.SMS.findAll({
-    where: {
-      createdAt: {
-        [Op.between]: [`${from}T00:00:00.000Z`, `${to}T00:00:00.000Z`]
-      },
-    } ,
-   order: [
-     ['id', 'DESC'],
- ],
-  }).then(x => {
-     console.log(x);
-    res.send(x);
-     
-   }).catch(err => console.log('error' + err));
-
-  return;
-}
-  
- }
-const inboundSMS = (req, res) => {
- db.SMS.findAll({
-  where: {
-    type: 'inbound'
-  } ,
-  order: [
-    ['id', 'DESC'],
-],
- }).then(x => {
-    console.log(x);
-    res.send(x);
-    
-  }).catch(err => console.log('error' + err));
-}
-const outboundSMS = (req, res) => {
- db.SMS.findAll({
-  where: {
-    type: 'outbound'
-  } ,
-  order: [
-    ['id', 'DESC'],
-],
-
- }).then(x => {
-    console.log(x);
-    res.send(x);
-    
-  }).catch(err => console.log('error' + err));
-}
-
-
-
-const deleteSMS = (req, res) => {
-  db.SMS.destroy({
-    where: {
-      id: req.params.id
-    }
-  }).then(() => res.sendStatus(200)).catch(err => console.log(err));
-
-}
+ 
 
 
 module.exports = {
@@ -287,10 +205,6 @@ module.exports = {
   saveBulkItems,
   getBatchLastNo,
 
-  inboundSMS,
-  deleteSMS,
   sendSMS,
   updateStatus,
-  outboundSMS,
-  getAllbyDate
 }

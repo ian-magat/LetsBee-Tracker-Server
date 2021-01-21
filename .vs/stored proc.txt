@@ -1,0 +1,9 @@
+
+//GET ALL BATCHES 
+
+DELIMITER //
+CREATE PROCEDURE sp_allBatch()
+BEGIN
+SELECT *,(SELECT COUNT(*) FROM tblitems WHERE batch_num = i.batch_num) batch_qty FROM tblitems i GROUP BY batch_num;
+END //
+DELIMITER ;
