@@ -135,6 +135,7 @@ const updateItem = (req, res) => {
       let weight = req.body.weight;
       let dimensions = req.body.dimensions;
       let quantity = req.body.quantity;
+   
 
       db.Items.update({
         item_no: item_no,
@@ -176,7 +177,7 @@ function saveBulkItems(req, res) {
   let data = req.body;
 
   db.Items.bulkCreate(data).then(() => { // Notice: There are no arguments here, as of right now you'll have to...
-    return db.Items.findAll();
+  res.sendStatus(200);
   }).then(Items => {
     console.log(Items) // ... in order to get the array of user objects
   })
@@ -194,7 +195,52 @@ const getBatchLastNo = (req, res) => {
     res.send(`${data.item_no}`);
   }).catch(err => res.send('0'));
 }
- 
+ //save record
+ function saveSingle(req, res) {
+
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+
+      let item_no = req.body.item_no;
+      let sender = req.body.sender;
+      let sender_payment = req.body.sender_payment;
+      let receiver = req.body.receiver;
+      let receiver_payment = req.body.receiver_payment;
+      let phone_number = req.body.phone_number;
+      let declared_item = req.body.declared_item;
+      let weight = req.body.weight;
+      let dimensions = req.body.dimensions;
+      let quantity = req.body.quantity;
+      let tracking_num = req.body.tracking_num;
+      let batch_num = req.body.batch_num;
+
+
+      db.Items.create({
+      item_no: item_no,
+        sender: sender,
+        sender_payment: sender_payment,
+        receiver: receiver,
+        receiver_payment: receiver_payment,
+        phone_number: phone_number,
+        declared_item: declared_item,
+        weight: weight,
+        dimensions: dimensions,
+        quantity: quantity,
+        tracking_num: tracking_num,
+        batch_num: batch_num,
+      })
+        .then(() => {
+          res.sendStatus(200)
+        })
+        .catch(err => {
+          console.log(err)
+        });
+    }
+  })
+
+}
 
 
 module.exports = {
@@ -204,6 +250,7 @@ module.exports = {
   deleteItem,
   saveBulkItems,
   getBatchLastNo,
+  saveSingle,
 
   sendSMS,
   updateStatus,
