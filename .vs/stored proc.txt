@@ -7,3 +7,15 @@ BEGIN
 SELECT *,(SELECT COUNT(*) FROM tblitems WHERE batch_num = i.batch_num) batch_qty FROM tblitems i GROUP BY batch_num;
 END //
 DELIMITER ;
+
+//GET ALL ITEM BATCHES 
+DELIMITER //
+
+CREATE PROCEDURE sp_allBatchItems(
+	IN batchNo VARCHAR(255)
+)
+BEGIN
+SELECT `id`,CONCAT(RIGHT(sender,1),'*****') sender,`sender_payment`,CONCAT(RIGHT(receiver,1),'*****') receiver,`receiver_payment`,`tracking_num`,`batch_num`,`phone_number`,`declared_item`,`weight`,`dimensions`,`quantity`,`current_location` FROM tblitems where batch_num = batchNo;
+END //
+
+DELIMITER ;

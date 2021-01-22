@@ -88,16 +88,11 @@ async function  refresh(){
 
 
 const getItems = (req, res) => {
-  db.Items.findAll({
-    where: {
-      batch_num: req.params.batchNo
-    },
-   order: [
-     ['item_no', 'ASC'],
- ],
-  }).then((data) => {
+  db.sequelize.query(`CALL sp_allBatchItems('${req.params.batchNo}');`).then(function(data){
     res.send(data);
-  }).catch(err => console.log(err));
+   }).catch(function(err){
+    res.json(err)
+});
 
 }
 //update status
