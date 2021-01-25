@@ -95,6 +95,19 @@ const getItems = (req, res) => {
 });
 
 }
+
+//get batch status
+const getBatchStatus = (req, res) => {
+  db.Items.findOne({
+    where: {
+      batch_num: req.params.batchNo
+    },
+    group: ['batch_num'],
+    attributes: ['current_location'], 
+  }).then(data => {
+    res.send(data);
+  }).catch(err => res.send(err));
+}
 //update status
 const updateStatus = (req, res) => {
   let status = req.body.status;
@@ -117,10 +130,29 @@ const updateItem = (req, res) => {
       res.sendStatus(403);
     } else {
 
-      let item_no = req.body.item_no;
       let sender = req.body.sender;
-      let sender_payment = req.body.sender_payment;
       let receiver = req.body.receiver;
+
+      db.Items.findOne({
+        where: {
+          id: req.body.id
+        } ,
+        attributes: ['sender', 'receiver'],
+    }).then((data) => {
+      let test= sender.indexOf("*");  
+       if(sender.indexOf("*") !== -1)
+       {
+        sender = data.sender;
+       }
+
+       if(receiver.indexOf("*") !== -1)
+       {
+        receiver = data.receiver;
+       }
+    })
+
+      let item_no = req.body.item_no;
+      let sender_payment = req.body.sender_payment;
       let receiver_payment = req.body.receiver_payment;
       let phone_number = req.body.phone_number;
       let declared_item = req.body.declared_item;
@@ -243,20 +275,20 @@ const getAll = (req, res) => {
     res.json(err)
 });
  }
-//get batch items
-const getitems = (req, res) => {
-  db.Items.findAll({
-    where: {
-      batch_num: req.params.batchNo
-    },
-   order: [
-     ['item_no', 'ASC'],
- ],
-  }).then((data) => {
-    res.send(data);
-  }).catch(err => console.log(err));
+// //get batch items
+// const getitems = (req, res) => {
+//   db.Items.findAll({
+//     where: {
+//       batch_num: req.params.batchNo
+//     },
+//    order: [
+//      ['item_no', 'ASC'],
+//  ],
+//   }).then((data) => {
+//     res.send(data);
+//   }).catch(err => console.log(err));
 
-}
+// }
 
 //get batch items
 const getAllItems = (req, res) => {
@@ -410,7 +442,8 @@ module.exports = {
   postEditItem,
   uploadFile,
   postAddItem,
-
+  getBatchStatus,
+  
   sendSMS,
   updateStatus,
 }

@@ -34,6 +34,7 @@ router.delete('/api/deleteItem/:id',ItemsController.deleteItem)
 router.post('/api/saveImportedData',ItemsController.saveBulkItems);
 router.post('/api/saveSingleData',verifyToken,ItemsController.saveSingle);
 router.get('/api/getBatchLastNo/:batchNo',ItemsController.getBatchLastNo);
+router.get('/api/getBatchStatus/:batchNo',ItemsController.getBatchStatus);
 
 
 
