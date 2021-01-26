@@ -108,6 +108,19 @@ const getBatchStatus = (req, res) => {
     res.send(data);
   }).catch(err => res.send(err));
 }
+
+//get item status
+const getItemStatus = (req, res) => {
+  db.Items.findOne({
+    where: {
+      tracking_num: req.params.trackno
+    },
+    group: ['batch_num'],
+    attributes: ['current_location'], 
+  }).then(data => {
+    res.send(data);
+  }).catch(err => res.send(err));
+}
 //update status
 const updateStatus = (req, res) => {
   let status = req.body.status;
@@ -443,6 +456,7 @@ module.exports = {
   uploadFile,
   postAddItem,
   getBatchStatus,
+  getItemStatus,
   
   sendSMS,
   updateStatus,

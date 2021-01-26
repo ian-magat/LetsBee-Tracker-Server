@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-    HOST: "database-tracker.c4rxjr6wovbq.us-east-2.rds.amazonaws.com",
+    HOST: "database-tracker.chwogi5d3bhn.ap-east-1.rds.amazonaws.com",
     USER: "admin",
     PASSWORD: "adminpassword",
     DB: "DB_letsbee-Tracker",

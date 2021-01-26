@@ -36,6 +36,8 @@ router.post('/api/saveSingleData',verifyToken,ItemsController.saveSingle);
 router.get('/api/getBatchLastNo/:batchNo',ItemsController.getBatchLastNo);
 router.get('/api/getBatchStatus/:batchNo',ItemsController.getBatchStatus);
 
+router.get('/api/getItemStatus/:trackno',ItemsController.getItemStatus);
+
 
 
 router.get('/api/batchNum/batch', ItemsController.getBatchesList)
