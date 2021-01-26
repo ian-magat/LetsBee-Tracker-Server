@@ -143,8 +143,7 @@ const updateItem = (req, res) => {
       res.sendStatus(403);
     } else {
 
-      let sender = req.body.sender;
-      let receiver = req.body.receiver;
+    
 
       db.Items.findOne({
         where: {
@@ -152,7 +151,9 @@ const updateItem = (req, res) => {
         } ,
         attributes: ['sender', 'receiver'],
     }).then((data) => {
-      let test= sender.indexOf("*");  
+    
+      let sender = req.body.sender;
+      let receiver = req.body.receiver;
        if(sender.indexOf("*") !== -1)
        {
         sender = data.sender;
@@ -162,17 +163,17 @@ const updateItem = (req, res) => {
        {
         receiver = data.receiver;
        }
-    })
 
-      let item_no = req.body.item_no;
-      let sender_payment = req.body.sender_payment;
-      let receiver_payment = req.body.receiver_payment;
-      let phone_number = req.body.phone_number;
-      let declared_item = req.body.declared_item;
-      let weight = req.body.weight;
-      let dimensions = req.body.dimensions;
-      let quantity = req.body.quantity;
-   
+       let item_no = req.body.item_no;
+       let sender_payment = req.body.sender_payment;
+       let receiver_payment = req.body.receiver_payment;
+       let phone_number = req.body.phone_number;
+       let declared_item = req.body.declared_item;
+       let weight = req.body.weight;
+       let dimensions = req.body.dimensions;
+       let quantity = req.body.quantity;
+
+       
 
       db.Items.update({
         item_no: item_no,
@@ -193,6 +194,9 @@ const updateItem = (req, res) => {
         res.sendStatus(200);
       }).catch(err => console.log(err));
 
+    })
+    
+   
     }
   })
 }
