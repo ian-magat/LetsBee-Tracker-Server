@@ -116,7 +116,7 @@ const getItemStatus = (req, res) => {
       tracking_num: req.params.trackno
     },
     group: ['batch_num'],
-    attributes: ['current_location'], 
+    attributes: ['id','item_no','current_location','batch_num','phone_number','declared_item','weight','dimensions','quantity'], 
   }).then(data => {
     res.send(data);
   }).catch(err => res.send(err));
