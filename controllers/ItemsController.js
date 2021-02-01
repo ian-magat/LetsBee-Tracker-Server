@@ -309,8 +309,16 @@ const getTrxLastNo = (req, res) => {
       let batch_num = req.body.batch_num;
       let clientTransactionNo = req.body.clientTransactionNo;
       let trxTimeStamp = req.body.trxTimeStamp;
-
-      db.Items.create({
+      
+  db.Items.findOne({
+    where: {
+      batch_num: batch_num
+    },
+    order: [ [ 'id', 'ASC' ]],
+  }).then(val => {
+    trxTimeStamp = val === null ? trxTimeStamp : `${val.trxTimeStamp}`
+ 
+    db.Items.create({
       item_no: item_no,
         sender: sender,
         sender_payment: sender_payment,
@@ -332,6 +340,11 @@ const getTrxLastNo = (req, res) => {
         .catch(err => {
           console.log(err)
         });
+
+  }).catch(err =>
+    res.send(err)
+  );
+
     }
   })
 
@@ -380,6 +393,10 @@ const getItem = (req, res) => {
 // POST Item
 // Add Item
 const postAddItem = (req, res, next) => {
+
+  
+
+
   let {
     item_no,
     sender,
@@ -395,6 +412,7 @@ const postAddItem = (req, res, next) => {
     quantity,
     current_location,
   } = req.body;
+
 
   db.Items.create({
     item_no,
