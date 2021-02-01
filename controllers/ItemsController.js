@@ -98,7 +98,15 @@ const getItems = (req, res) => {
 //GET TRX INFO
 const getTrxInfo = (req, res) => {
   db.sequelize.query(`CALL 	sp_getTrxInfo('${req.params.trxNo}');`).then(function(data){
-    res.send(data);
+    if(data.length === 0)
+    {
+      res.json([{
+        "receiver": "",
+        "sender": "",
+        "steps": ""
+      }]);
+    }
+    res.json(data);
    }).catch(function(err){
     res.json(err)
 });
