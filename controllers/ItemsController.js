@@ -298,7 +298,8 @@ const getTrxLastNo = (req, res) => {
       let quantity = req.body.quantity;
       let tracking_num = req.body.tracking_num;
       let batch_num = req.body.batch_num;
-
+      let clientTransactionNo = req.body.clientTransactionNo;
+      let trxTimeStamp = req.body.trxTimeStamp;
 
       db.Items.create({
       item_no: item_no,
@@ -313,6 +314,8 @@ const getTrxLastNo = (req, res) => {
         quantity: quantity,
         tracking_num: tracking_num,
         batch_num: batch_num,
+        clientTransactionNo:clientTransactionNo,
+        trxTimeStamp:trxTimeStamp
       })
         .then(() => {
           res.sendStatus(200)

@@ -40,8 +40,6 @@ router.get('/api/getTrxLastNo/:batchNo',ItemsController.getTrxLastNo);
 
 router.get('/api/getItemStatus/:trackno',ItemsController.getItemStatus);
 
-
-
 router.get('/api/batchNum/batch', ItemsController.getBatchesList)
 
 router.post('/api/item/add', ItemsController.postAddItem);
