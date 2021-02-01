@@ -281,7 +281,7 @@ const getTrxLastNo = (req, res) => {
   let yr = parseInt(moment().format('YY')) + 35;
   let m = parseInt(moment().format('MM')) * 8;
   let d = parseInt(moment().format('DD')) * 3;
-  let lastTrxNo = parseInt(data.item_no) + 999
+  let lastTrxNo = parseInt(data === null ? 1 : data.item_no) + 999
 
     res.json({clientTrxNo : `${yr}${m}${d < 10 ? '0' + d : d}${lastTrxNo}`});
   }).catch(err => res.send('0'));
