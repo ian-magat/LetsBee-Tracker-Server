@@ -44,6 +44,12 @@ module.exports = (sequelize, Sequelize) => {
       current_location: {
           type: Sequelize.STRING,
           defaultValue: '0'
+      },
+      clientTransactionNo: {
+          type: Sequelize.STRING,
+      },
+      trxTimeStamp: {
+          type: Sequelize.STRING,
       }
     }, {
         freezeTableName: true,

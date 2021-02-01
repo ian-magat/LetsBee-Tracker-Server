@@ -35,6 +35,8 @@ router.post('/api/saveImportedData',ItemsController.saveBulkItems);
 router.post('/api/saveSingleData',verifyToken,ItemsController.saveSingle);
 router.get('/api/getBatchLastNo/:batchNo',ItemsController.getBatchLastNo);
 router.get('/api/getBatchStatus/:batchNo',ItemsController.getBatchStatus);
+router.get('/api/getTrxInfo/:trxNo',ItemsController.getTrxInfo);
+router.get('/api/getTrxLastNo/:batchNo',ItemsController.getTrxLastNo);
 
 router.get('/api/getItemStatus/:trackno',ItemsController.getItemStatus);
 

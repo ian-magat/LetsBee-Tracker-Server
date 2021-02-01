@@ -95,6 +95,15 @@ const getItems = (req, res) => {
 });
 
 }
+//GET TRX INFO
+const getTrxInfo = (req, res) => {
+  db.sequelize.query(`CALL 	sp_getTrxInfo('${req.params.trxNo}');`).then(function(data){
+    res.send(data);
+   }).catch(function(err){
+    res.json(err)
+});
+
+}
 
 //get batch status
 const getBatchStatus = (req, res) => {
@@ -123,16 +132,32 @@ const getItemStatus = (req, res) => {
 }
 //update status
 const updateStatus = (req, res) => {
+  let curDate = moment().format();
+  let trxDatetime = '';
+
   let status = req.body.status;
-  db.Items.update({
-    current_location: status,
-  }, {
+
+  db.Items.findOne({
     where: {
       batch_num: req.params.batchNo
     }
-  }).then(() => {
-    res.sendStatus(200);
-  }).catch(err => console.log(err));
+  }).then(val => {
+    trxDatetime = val.trxTimeStamp === null ? curDate : `${val.trxTimeStamp},${curDate}`
+
+    db.Items.update({
+      current_location: status,
+      trxTimeStamp: trxDatetime
+    }, {
+      where: {
+        batch_num: req.params.batchNo
+      }
+    }).then(() => {
+      res.sendStatus(200);
+    }).catch(err => console.log(err));
+
+  }).catch(err =>
+    res.send(err)
+  );
 
 }
 //update Items
@@ -234,6 +259,23 @@ const getBatchLastNo = (req, res) => {
     order: [ [ 'id', 'DESC' ]],
 }).then((data) => {
     res.send(`${data.item_no}`);
+  }).catch(err => res.send('0'));
+}
+//get  last trx no
+const getTrxLastNo = (req, res) => {
+  db.Items.findOne({
+    where: {
+      batch_num: req.params.batchNo
+    } ,
+    order: [ [ 'id', 'DESC' ]],
+}).then((data) => {
+
+  let yr = parseInt(moment().format('YY')) + 35;
+  let m = parseInt(moment().format('MM')) * 8;
+  let d = parseInt(moment().format('DD')) * 3;
+  let lastTrxNo = parseInt(data.item_no) + 999
+
+    res.json({clientTrxNo : `${yr}${m}${d < 10 ? '0' + d : d}${lastTrxNo}`});
   }).catch(err => res.send('0'));
 }
  //save record
@@ -461,7 +503,9 @@ module.exports = {
   postAddItem,
   getBatchStatus,
   getItemStatus,
-  
+  getTrxInfo,
+  getTrxLastNo,
+
   sendSMS,
   updateStatus,
 }
