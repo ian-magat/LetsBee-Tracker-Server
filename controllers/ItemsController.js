@@ -148,7 +148,8 @@ const updateStatus = (req, res) => {
   db.Items.findOne({
     where: {
       batch_num: req.params.batchNo
-    }
+    },
+    order: [ [ 'id', 'ASC' ]],
   }).then(val => {
     trxDatetime = val.trxTimeStamp === null ? curDate : `${val.trxTimeStamp},${curDate}`
 
