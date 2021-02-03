@@ -100,13 +100,13 @@ const getTrxInfo = (req, res) => {
   db.sequelize.query(`CALL 	sp_getTrxInfo('${req.params.trxNo}');`).then(function(data){
     if(data.length === 0)
     {
-      res.json([{
+      res.json({
         "receiver": "",
         "sender": "",
         "steps": ""
-      }]);
+      });
     }
-    res.json(data);
+    res.json(data[0]);
    }).catch(function(err){
     res.json(err)
 });
