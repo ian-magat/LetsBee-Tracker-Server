@@ -465,6 +465,8 @@ const postEditItem = (req, res, next) => {
       item.quantity = req.body.quantity;
       item.declared_item = req.body.declared_item;
       item.current_location = req.body.current_location;
+      item.clientTransactionNo = req.body.clientTransactionNo;
+      item.trxDatetime = req.body.trxDatetime;
       // item.userId = req.body.userId;
       return item.save();
     })
