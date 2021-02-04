@@ -2,10 +2,15 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-    HOST: "tracker-sms-db.chwogi5d3bhn.ap-east-1.rds.amazonaws.com",
-    USER: "admin",
-    PASSWORD: "adminpassword",
-    DB: "DB_letsbee-Tracker",
+  HOST: "localhost",
+  USER: "root",
+  PASSWORD: "adminpassword",
+  DB: "DB_letsbee-Tracker",
+
+    // HOST: "tracker-sms-db.chwogi5d3bhn.ap-east-1.rds.amazonaws.com",
+    // USER: "admin",
+    // PASSWORD: "adminpassword",
+    // DB: "DB_letsbee-Tracker",
 
     // LOCAL
     // HOST: 'localhost',
