@@ -101,6 +101,7 @@ const getTrxInfo = (req, res) => {
     if(data.length === 0)
     {
       res.json({
+        "code": -1,
         "receiver": "",
         "sender": "",
         "steps": ""

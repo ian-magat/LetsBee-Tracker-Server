@@ -19,6 +19,24 @@ const sequelize = new Sequelize(
     }
   );
 
+  const sequelizeSMS = new Sequelize(
+    config.DB,
+    config.USER,
+    config.PASSWORD,
+    {
+      host: config.HOST,
+      dialect: config.dialect,
+      port:3306,
+      pool: {
+        max: config.pool.max,
+        min: config.pool.min,
+        acquire: config.pool.acquire,
+        idle: config.pool.idle
+      }
+    }
+  );
+
+
   sequelize
   .authenticate()
   .then(() => {
