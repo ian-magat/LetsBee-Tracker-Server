@@ -17,7 +17,7 @@ const sendSMS = (req, res) => {
 
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
-        res.sendStatus(403);
+      res.sendStatus(403);
     } else {
       let date_ob = new Date();
 
@@ -28,48 +28,48 @@ const sendSMS = (req, res) => {
 
       let date = ("0" + date_ob.getDate()).slice(-2);
       // current month
-let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+      let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
 
-// current year
-let year = date_ob.getFullYear();
+      // current year
+      let year = date_ob.getFullYear();
 
-// current hours
-let hours = date_ob.getHours();
+      // current hours
+      let hours = date_ob.getHours();
 
-// current minutes
-let minutes = date_ob.getMinutes();
+      // current minutes
+      let minutes = date_ob.getMinutes();
 
 
 
-     let curdate = year + "-" + month + "-" + date + " " + hours + ":" + minutes;
+      let curdate = year + "-" + month + "-" + date + " " + hours + ":" + minutes;
       db.SMS.create({
         message: message,
         number: number,
         status: status,
         type: type,
-        dateSent:curdate
+        dateSent: curdate
       })
         .then(() => {
           let ref = refresh();
-    ref.then((data) => 
-      global.io.emit('reload',data)
-    )
+          ref.then((data) =>
+            global.io.emit('reload', data)
+          )
           res.sendStatus(200)
         })
         .catch(err => console.log(err));
     }
-})
-  
+  })
+
 }
- 
-async function  refresh(){
- return await db.SMS.findAll({
-   order: [
-     ['id', 'DESC'],
- ],
+
+async function refresh() {
+  return await db.SMS.findAll({
+    order: [
+      ['id', 'DESC'],
+    ],
   });
 
- }
+}
 //get all batches
 // const getAll = (req, res) => {
 //   db.Items.findAll({
@@ -80,7 +80,7 @@ async function  refresh(){
 //   }).then(x => {
 //      console.log(x);
 //     res.send(x);
-     
+
 //    }).catch(err => console.log('error' + err));
 
 //  }
@@ -88,18 +88,17 @@ async function  refresh(){
 
 
 const getItems = (req, res) => {
-  db.sequelize.query(`CALL sp_allBatchItems('${req.params.batchNo}');`).then(function(data){
+  db.sequelize.query(`CALL sp_allBatchItems('${req.params.batchNo}');`).then(function (data) {
     res.send(data);
-   }).catch(function(err){
+  }).catch(function (err) {
     res.json(err)
-});
+  });
 
 }
 //GET TRX INFO
 const getTrxInfo = (req, res) => {
-  db.sequelize.query(`CALL 	sp_getTrxInfo('${req.params.trxNo}');`).then(function(data){
-    if(data.length === 0)
-    {
+  db.sequelize.query(`CALL 	sp_getTrxInfo('${req.params.trxNo}');`).then(function (data) {
+    if (data.length === 0) {
       res.json({
         "code": -1,
         "receiver": "",
@@ -114,9 +113,9 @@ const getTrxInfo = (req, res) => {
       "steps": data[0].steps.split(",")
     });
     res.json({});
-   }).catch(function(err){
+  }).catch(function (err) {
     res.json(err)
-});
+  });
 
 }
 
@@ -127,7 +126,7 @@ const getBatchStatus = (req, res) => {
       batch_num: req.params.batchNo
     },
     group: ['batch_num'],
-    attributes: ['current_location'], 
+    attributes: ['current_location'],
   }).then(data => {
     res.send(data);
   }).catch(err => res.send(err));
@@ -140,7 +139,7 @@ const getItemStatus = (req, res) => {
       tracking_num: req.params.trackno
     },
     group: ['batch_num'],
-    attributes: ['id','item_no','current_location','batch_num','phone_number','declared_item','weight','dimensions','quantity'], 
+    attributes: ['id', 'item_no', 'current_location', 'batch_num', 'phone_number', 'declared_item', 'weight', 'dimensions', 'quantity'],
   }).then(data => {
     res.send(data);
   }).catch(err => res.send(err));
@@ -156,7 +155,7 @@ const updateStatus = (req, res) => {
     where: {
       batch_num: req.params.batchNo
     },
-    order: [ [ 'id', 'ASC' ]],
+    order: [['id', 'ASC']],
   }).then(val => {
     trxDatetime = val.trxTimeStamp === null ? curDate : `${val.trxTimeStamp},${curDate}`
 
@@ -184,60 +183,58 @@ const updateItem = (req, res) => {
       res.sendStatus(403);
     } else {
 
-    
+
 
       db.Items.findOne({
         where: {
           id: req.body.id
-        } ,
+        },
         attributes: ['sender', 'receiver'],
-    }).then((data) => {
-    
-      let sender = req.body.sender;
-      let receiver = req.body.receiver;
-       if(sender.indexOf("*") !== -1)
-       {
-        sender = data.sender;
-       }
+      }).then((data) => {
 
-       if(receiver.indexOf("*") !== -1)
-       {
-        receiver = data.receiver;
-       }
-
-       let item_no = req.body.item_no;
-       let sender_payment = req.body.sender_payment;
-       let receiver_payment = req.body.receiver_payment;
-       let phone_number = req.body.phone_number;
-       let declared_item = req.body.declared_item;
-       let weight = req.body.weight;
-       let dimensions = req.body.dimensions;
-       let quantity = req.body.quantity;
-
-       
-
-      db.Items.update({
-        item_no: item_no,
-        sender: sender,
-        sender_payment: sender_payment,
-        receiver: receiver,
-        receiver_payment: receiver_payment,
-        phone_number: phone_number,
-        declared_item: declared_item,
-        weight: weight,
-        dimensions: dimensions,
-        quantity: quantity,
-      }, {
-        where: {
-          id: req.params.id
+        let sender = req.body.sender;
+        let receiver = req.body.receiver;
+        if (sender.indexOf("*") !== -1) {
+          sender = data.sender;
         }
-      }).then(() => {
-        res.sendStatus(200);
-      }).catch(err => console.log(err));
 
-    })
-    
-   
+        if (receiver.indexOf("*") !== -1) {
+          receiver = data.receiver;
+        }
+
+        let item_no = req.body.item_no;
+        let sender_payment = req.body.sender_payment;
+        let receiver_payment = req.body.receiver_payment;
+        let phone_number = req.body.phone_number;
+        let declared_item = req.body.declared_item;
+        let weight = req.body.weight;
+        let dimensions = req.body.dimensions;
+        let quantity = req.body.quantity;
+
+
+
+        db.Items.update({
+          item_no: item_no,
+          sender: sender,
+          sender_payment: sender_payment,
+          receiver: receiver,
+          receiver_payment: receiver_payment,
+          phone_number: phone_number,
+          declared_item: declared_item,
+          weight: weight,
+          dimensions: dimensions,
+          quantity: quantity,
+        }, {
+          where: {
+            id: req.params.id
+          }
+        }).then(() => {
+          res.sendStatus(200);
+        }).catch(err => console.log(err));
+
+      })
+
+
     }
   })
 }
@@ -257,9 +254,13 @@ const deleteItem = (req, res) => {
 function saveBulkItems(req, res) {
 
   let data = req.body;
+  data.forEach(val => {
+   //save mobile no if not exist
+   checkandSaveMobileIfExist(val.phone_number, val.receiver);
+});
 
   db.Items.bulkCreate(data).then(() => { // Notice: There are no arguments here, as of right now you'll have to...
-  res.sendStatus(200);
+    res.sendStatus(200);
   }).then(Items => {
     console.log(Items) // ... in order to get the array of user objects
   })
@@ -271,9 +272,9 @@ const getBatchLastNo = (req, res) => {
   db.Items.findOne({
     where: {
       batch_num: req.params.batchNo
-    } ,
-    order: [ [ 'id', 'DESC' ]],
-}).then((data) => {
+    },
+    order: [['id', 'DESC']],
+  }).then((data) => {
     res.send(`${data.item_no}`);
   }).catch(err => res.send('0'));
 }
@@ -282,21 +283,24 @@ const getTrxLastNo = (req, res) => {
   db.Items.findOne({
     where: {
       batch_num: req.params.batchNo
-    } ,
-    order: [ [ 'id', 'DESC' ]],
-}).then((data) => {
+    },
+    order: [['id', 'DESC']],
+  }).then((data) => {
 
-  let yr = parseInt(moment().format('YY')) + 35;
-  let m = parseInt(moment().format('MM')) * 8;
-  let d = parseInt(moment().format('DD')) * 3;
-  let lastTrxNo =  parseInt(data === null ? 0 : data.item_no) + 999
+    let yr = parseInt(moment().format('YY')) + 35;
+    let m = parseInt(moment().format('MM')) * 8;
+    let d = parseInt(moment().format('DD')) * 3;
+    let lastTrxNo = parseInt(data === null ? 0 : data.item_no) + 999
 
-    res.json({clientTrxNo : `${yr}${m}${d < 10 ? '0' + d : d}${data === null ? '0' + lastTrxNo:lastTrxNo}`});
+    res.json({ clientTrxNo: `${yr}${m}${d < 10 ? '0' + d : d}${data === null ? '0' + lastTrxNo : lastTrxNo}` });
   }).catch(err => res.send('0'));
 }
- //save record
- function saveSingle(req, res) {
 
+async function checkandSaveMobileIfExist(mobile, name) {
+  db.sequelize.query(`CALL sp_insertRecipient('${mobile}','${name}');`);
+}
+//save record
+function saveSingle(req, res) {
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
       res.sendStatus(403);
@@ -316,41 +320,44 @@ const getTrxLastNo = (req, res) => {
       let batch_num = req.body.batch_num;
       let clientTransactionNo = req.body.clientTransactionNo;
       let trxTimeStamp = req.body.trxTimeStamp;
-      
-  db.Items.findOne({
-    where: {
-      batch_num: batch_num
-    },
-    order: [ [ 'id', 'ASC' ]],
-  }).then(val => {
-    trxTimeStamp = val === null ? trxTimeStamp : `${val.trxTimeStamp}`
- 
-    db.Items.create({
-      item_no: item_no,
-        sender: sender,
-        sender_payment: sender_payment,
-        receiver: receiver,
-        receiver_payment: receiver_payment,
-        phone_number: phone_number,
-        declared_item: declared_item,
-        weight: weight,
-        dimensions: dimensions,
-        quantity: quantity,
-        tracking_num: tracking_num,
-        batch_num: batch_num,
-        clientTransactionNo:clientTransactionNo,
-        trxTimeStamp:trxTimeStamp
-      })
-        .then(() => {
-          res.sendStatus(200)
-        })
-        .catch(err => {
-          console.log(err)
-        });
 
-  }).catch(err =>
-    res.send(err)
-  );
+      //save mobile no if not exist
+      checkandSaveMobileIfExist(phone_number, receiver);
+
+      db.Items.findOne({
+        where: {
+          batch_num: batch_num
+        },
+        order: [['id', 'ASC']],
+      }).then(val => {
+        trxTimeStamp = val === null ? trxTimeStamp : `${val.trxTimeStamp}`
+
+        db.Items.create({
+          item_no: item_no,
+          sender: sender,
+          sender_payment: sender_payment,
+          receiver: receiver,
+          receiver_payment: receiver_payment,
+          phone_number: phone_number,
+          declared_item: declared_item,
+          weight: weight,
+          dimensions: dimensions,
+          quantity: quantity,
+          tracking_num: tracking_num,
+          batch_num: batch_num,
+          clientTransactionNo: clientTransactionNo,
+          trxTimeStamp: trxTimeStamp
+        })
+          .then(() => {
+            res.sendStatus(200)
+          })
+          .catch(err => {
+            console.log(err)
+          });
+
+      }).catch(err =>
+        res.send(err)
+      );
 
     }
   })
@@ -360,12 +367,12 @@ const getTrxLastNo = (req, res) => {
 //get all batches
 const getAll = (req, res) => {
 
-  db.sequelize.query('CALL sp_allBatch();').then(function(response){
+  db.sequelize.query('CALL sp_allBatch();').then(function (response) {
     res.json(response);
-   }).catch(function(err){
+  }).catch(function (err) {
     res.json(err)
-});
- }
+  });
+}
 // //get batch items
 // const getitems = (req, res) => {
 //   db.Items.findAll({
@@ -384,14 +391,15 @@ const getAll = (req, res) => {
 //get batch items
 const getAllItems = (req, res) => {
   db.Items.findAll()
-  .then((data) => res.send(data))
+    .then((data) => res.send(data))
 
 }
 
 // GET ITEM
 const getItem = (req, res) => {
-  db.Items.findAll({ 
-    where: { id: req.params.ItemId } })
+  db.Items.findAll({
+    where: { id: req.params.ItemId }
+  })
     .then((Item) => res.send(Item))
     .catch((err) => console.log(err));
 };
@@ -401,7 +409,7 @@ const getItem = (req, res) => {
 // Add Item
 const postAddItem = (req, res, next) => {
 
-  
+
 
 
   let {
@@ -541,7 +549,7 @@ const updateItemStatus = (req, res) => {
       trxTimeStamp: trxDatetime
     }, {
       where: {
-        clientTransactionNo:  req.params.clientTrxNo
+        clientTransactionNo: req.params.clientTrxNo
       }
     }).then(() => {
       res.sendStatus(200);

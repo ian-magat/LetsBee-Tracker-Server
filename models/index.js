@@ -34,5 +34,6 @@ const sequelize = new Sequelize(
 
   db.users = require("../models/Users.model")(sequelize, Sequelize);
   db.Items = require("../models/Items.model")(sequelize, Sequelize);
+  db.recipients = require("../models/recipients.model")(sequelize, Sequelize);
 
   module.exports = db;
