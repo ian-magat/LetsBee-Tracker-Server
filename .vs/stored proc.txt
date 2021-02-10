@@ -28,7 +28,7 @@ CREATE PROCEDURE sp_getTrxInfo(
 	IN batchNo VARCHAR(255)
 )
 BEGIN
-SELECT (SELECT 200 ) Code,RPAD(SUBSTR(receiver, 1, 1), Length(receiver), '*') receiver,RPAD(SUBSTR(sender, 1, 1), Length(sender), '*') sender,CONCAT('["', REPLACE(trxTimeStamp, ',', '","'), '"]') steps FROM tblitems where clientTransactionNo = batchNo;
+SELECT (SELECT 200 ) code,RPAD(SUBSTR(receiver, 1, 1), Length(receiver), '*') receiver,RPAD(SUBSTR(sender, 1, 1), Length(sender), '*') sender,trxTimeStamp steps FROM tblitems where clientTransactionNo = batchNo;
 END //
 
 DELIMITER ;

@@ -107,7 +107,13 @@ const getTrxInfo = (req, res) => {
         "steps": ""
       });
     }
-    res.json(data[0]);
+    res.json({
+      "code": 200,
+      "receiver": data[0].receiver,
+      "sender": data[0].sender,
+      "steps": data[0].steps.split(",")
+    });
+    res.json({});
    }).catch(function(err){
     res.json(err)
 });
