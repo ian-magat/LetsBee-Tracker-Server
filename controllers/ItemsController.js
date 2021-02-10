@@ -518,6 +518,34 @@ const uploadFile = async (req, res) => {
     });
 };
 
+//update item status
+const updateItemStatus = (req, res) => {
+
+  let curDate = moment().format();
+
+  db.Items.findOne({
+    where: {
+      clientTransactionNo: req.params.clientTrxNo
+    }
+  }).then(val => {
+    let trxDatetime = `${val.trxTimeStamp},${curDate}`
+
+    db.Items.update({
+      current_location: '4',
+      trxTimeStamp: trxDatetime
+    }, {
+      where: {
+        clientTransactionNo:  req.params.clientTrxNo
+      }
+    }).then(() => {
+      res.sendStatus(200);
+    }).catch(err => console.log(err));
+
+  }).catch(err =>
+    res.send(err)
+  );
+
+}
 
 module.exports = {
   getAll,
@@ -541,4 +569,5 @@ module.exports = {
 
   sendSMS,
   updateStatus,
+  updateItemStatus
 }
