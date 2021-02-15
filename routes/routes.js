@@ -39,6 +39,8 @@ router.get('/api/getTrxInfo/:trxNo',ItemsController.getTrxInfo);
 router.get('/api/getTrxLastNo/:batchNo',ItemsController.getTrxLastNo);
 router.post('/api/updateItemStatus/:clientTrxNo',ItemsController.updateItemStatus);
 
+router.get('/api/allRecipient', ItemsController.getAllRecipient);
+
 router.get('/api/getItemStatus/:trackno',ItemsController.getItemStatus);
 
 router.get('/api/batchNum/batch', ItemsController.getBatchesList)
@@ -64,6 +66,10 @@ router.delete('/api/deleteUser/:id',UserController.Delete)
 router.post('/api/updateProfile/:id',verifyToken,UserController.updateProfile);
 router.post('/api/updatePassword/:id',verifyToken,UserController.updatePassword);
 router.post('/api/updateUser/:id',verifyToken,UserController.updateUser);
+
+
+router.delete('/api/deleteRecipient/:id',Controller.deleteRecipient)
+router.post('/api/updateRecipient/:id',verifyToken,Controller.updateRecipient);
 
 router.post('/api/login',AuthController.login);
 function verifyToken(req,res,next)

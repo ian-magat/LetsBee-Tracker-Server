@@ -10,6 +10,10 @@ module.exports = (sequelize, Sequelize) => {
       },
       name: {
         type: Sequelize.STRING
+      },
+      isSend: {
+        type: Sequelize.INTEGER,
+        defaultValue: '1'
       }
     }, {
         freezeTableName: true,

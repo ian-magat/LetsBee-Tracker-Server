@@ -186,6 +186,29 @@ const deleteSMS = (req, res) => {
 
 }
 
+const deleteRecipient = (req, res) => {
+  db.recipients.destroy({
+    where: {
+      id: req.params.id
+    }
+  }).then(() => res.sendStatus(200)).catch(err => console.log(err));
+}
+const updateRecipient = (req, res) => {
+  let mobile = req.body.mobileNo;
+  let name = req.body.name;
+
+  db.recipients.update({
+    mobileNo: mobile,
+    name:name
+  }, {
+    where: {
+      id: req.params.id
+    }
+  }).then(() => {
+    res.sendStatus(200);
+  }).catch(err => console.log(err));
+
+}
 
 module.exports = {
   inboundSMS,
@@ -194,5 +217,7 @@ module.exports = {
   updateStatus,
   outboundSMS,
   getAll,
-  getAllbyDate
+  getAllbyDate,
+  deleteRecipient,
+  updateRecipient
 }

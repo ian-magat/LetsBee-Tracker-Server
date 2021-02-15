@@ -41,6 +41,10 @@ module.exports = (sequelize, Sequelize) => {
       quantity: {
         type: Sequelize.STRING
       },
+      isDelivered: {
+        type: Sequelize.STRING,
+        defaultValue: '0'
+      },
       current_location: {
           type: Sequelize.STRING,
           defaultValue: '0'
