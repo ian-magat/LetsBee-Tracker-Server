@@ -70,20 +70,7 @@ async function  refresh(){
   });
 
  }
-//get all batches
-// const getAll = (req, res) => {
-//   db.Items.findAll({
-//     group: ['batch_num'],
-//    order: [
-//      ['id', 'DESC'],
-//  ],
-//   }).then(x => {
-//      console.log(x);
-//     res.send(x);
-     
-//    }).catch(err => console.log('error' + err));
 
-//  }
 //get batch items
 
 
@@ -140,7 +127,7 @@ const getItemStatus = (req, res) => {
       tracking_num: req.params.trackno
     },
     group: ['batch_num'],
-    attributes: ['id','item_no','current_location','batch_num','phone_number','declared_item','weight','dimensions','quantity'], 
+    attributes: ['id','item_no','current_location','batch_num','phone_number','declared_item','weight','dimensions','isDelivered','quantity'], 
   }).then(data => {
     res.send(data);
   }).catch(err => res.send(err));
@@ -212,6 +199,7 @@ const updateItem = (req, res) => {
        let declared_item = req.body.declared_item;
        let weight = req.body.weight;
        let dimensions = req.body.dimensions;
+       let isDelivered = req.body.isDelivered;
        let quantity = req.body.quantity;
 
        
@@ -226,6 +214,7 @@ const updateItem = (req, res) => {
         declared_item: declared_item,
         weight: weight,
         dimensions: dimensions,
+        isDelivered: isDelivered,
         quantity: quantity,
       }, {
         where: {
@@ -314,6 +303,7 @@ const getTrxLastNo = (req, res) => {
       let quantity = req.body.quantity;
       let tracking_num = req.body.tracking_num;
       let batch_num = req.body.batch_num;
+      let isDelivered = req.body.isDelivered;
       let clientTransactionNo = req.body.clientTransactionNo;
       let trxTimeStamp = req.body.trxTimeStamp;
       
@@ -338,6 +328,7 @@ const getTrxLastNo = (req, res) => {
         quantity: quantity,
         tracking_num: tracking_num,
         batch_num: batch_num,
+        isDelivered: isDelivered,
         clientTransactionNo:clientTransactionNo,
         trxTimeStamp:trxTimeStamp
       })
@@ -358,13 +349,28 @@ const getTrxLastNo = (req, res) => {
 }
 
 //get all batches
-const getAll = (req, res) => {
+// const getAll = (req, res) => {
 
-  db.sequelize.query('CALL sp_allBatch();').then(function(response){
-    res.json(response);
-   }).catch(function(err){
-    res.json(err)
-});
+//   db.sequelize.query('CALL sp_allBatch();').then(function(response){
+//     res.json(response);
+//    }).catch(function(err){
+//     res.json(err)
+// });
+//  }
+
+ //get all batches
+const getAll = (req, res) => {
+  db.Items.findAll({
+    // group: ['batch_num'],
+   order: [
+     ['id', 'DESC'],
+ ],
+  }).then(x => {
+     console.log(x);
+    res.send(x);
+     
+   }).catch(err => console.log('error' + err));
+
  }
 // //get batch items
 // const getitems = (req, res) => {
@@ -401,9 +407,6 @@ const getItem = (req, res) => {
 // Add Item
 const postAddItem = (req, res, next) => {
 
-  
-
-
   let {
     item_no,
     sender,
@@ -417,6 +420,7 @@ const postAddItem = (req, res, next) => {
     weight,
     dimensions,
     quantity,
+    isDelivered,
     current_location,
   } = req.body;
 
@@ -434,6 +438,7 @@ const postAddItem = (req, res, next) => {
     weight,
     dimensions,
     quantity,
+    isDelivered,
     current_location,
   }).then((result) => {
     res.send(result);
@@ -471,6 +476,7 @@ const postEditItem = (req, res, next) => {
       item.dimensions = req.body.dimensions;
       item.quantity = req.body.quantity;
       item.declared_item = req.body.declared_item;
+      item.isDelivered = req.body.isDelivered;
       item.current_location = req.body.current_location;
       item.clientTransactionNo = req.body.clientTransactionNo;
       item.trxDatetime = req.body.trxDatetime;
