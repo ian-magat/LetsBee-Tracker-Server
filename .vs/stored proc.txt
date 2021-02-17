@@ -42,10 +42,10 @@ CREATE PROCEDURE sp_insertRecipient(
     IN name_ VARCHAR(255)
 )
 BEGIN
- INSERT INTO tblrecipients (mobileNo,name) 
+ INSERT INTO tblRecipients (mobileNo,name) 
   SELECT mobileNo_, name_ 
   WHERE NOT EXISTS (
-    SELECT * FROM tblrecipients WHERE  mobileNo = mobileNo_
+    SELECT * FROM tblRecipients WHERE  mobileNo = mobileNo_
   );
 END //
 DELIMITER ;
