@@ -18,12 +18,13 @@ let server = http.createServer(app);
 var io = socketIO(server);
 global.io = io; //added
 // io.on('connection', (socket) => {
+  
 
 //  db.SMS.findAll().then(x => {
 //     socket.emit('message',x)
 //   });
 
-//   console.log("a new user just connected");
+//   console.log("a new user just connected"); 
   
 
 //   socket.on('disconnect', () => {

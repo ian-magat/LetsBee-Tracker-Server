@@ -137,6 +137,7 @@ const updateStatus = (req, res) => {
   let trxDatetime = '';
 
   let status = req.body.status;
+  let isBack = req.body.isBack;
 
   db.Items.findOne({
     where: {
@@ -144,7 +145,16 @@ const updateStatus = (req, res) => {
     },
     order: [['id', 'ASC']],
   }).then(val => {
-    trxDatetime = val.trxTimeStamp === null ? curDate : `${val.trxTimeStamp},${curDate}`
+    if(isBack === '1')
+    {
+      let splitTrxDT =  val.trxTimeStamp.split(",");
+      let sliceTrxDT =  splitTrxDT.slice(0,-1);
+       trxDatetime =sliceTrxDT.toString();
+    }
+    else
+    {
+      trxDatetime = val.trxTimeStamp === null ? curDate : `${val.trxTimeStamp},${curDate}`
+    }
 
     db.Items.update({
       current_location: status,
