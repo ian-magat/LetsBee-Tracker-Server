@@ -38,6 +38,7 @@ router.get('/api/getBatchStatus/:batchNo',ItemsController.getBatchStatus);
 router.get('/api/getTrxInfo/:trxNo',ItemsController.getTrxInfo);
 router.get('/api/getTrxLastNo/:batchNo',ItemsController.getTrxLastNo);
 router.post('/api/updateItemStatus/:clientTrxNo',ItemsController.updateItemStatus);
+router.post('/api/resetItemStatus/:batchNo',verifyToken,ItemsController.resetSentStatus);
 
 router.get('/api/allRecipient', ItemsController.getAllRecipient);
 
@@ -51,6 +52,7 @@ router.patch('/api/edit/:ItemId', ItemsController.postEditItem);
 
 router.post('/api/upload', ItemsController.uploadFile);
 
+router.post('/api/updateSentStatus/:clientTrxNo',verifyToken,ItemsController.updateSentStatus);
 // end Item Controllers
 
 router.post('/api/GetSMSbyDate',Controller.getAllbyDate)

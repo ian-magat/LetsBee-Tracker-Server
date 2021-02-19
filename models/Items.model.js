@@ -54,6 +54,10 @@ module.exports = (sequelize, Sequelize) => {
       },
       trxTimeStamp: {
           type: Sequelize.STRING,
+      },
+      isSent: {
+          type: Sequelize.STRING,
+          defaultValue: '0'
       }
     }, {
         freezeTableName: true,
