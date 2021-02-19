@@ -610,13 +610,13 @@ const updateSentStatus = (req, res) => {
 }
 
 //reset Sent Status
-const resetSentStatus = (req, res) => {
+const updateSentStatusbyBatch = (req, res) => {
   jwt.verify(req.token, 'secretkey', (err, authData) => {
     if (err) {
       res.sendStatus(403);
     } else {
       db.Items.update({
-        isSent: '0',
+        isSent: req.body.status,
       }, {
         where: {
           batch_num: req.params.batchNo
@@ -649,7 +649,7 @@ module.exports = {
   getTrxInfo,
   getTrxLastNo,
   updateSentStatus,
-  resetSentStatus,
+  updateSentStatusbyBatch,
 
   sendSMS,
   updateStatus,
