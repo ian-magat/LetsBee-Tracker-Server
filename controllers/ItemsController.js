@@ -386,11 +386,20 @@ const getAll = (req, res) => {
      
 //    }).catch(err => console.log('error' + err));
 
-  db.sequelize.query('CALL sp_allBatch();').then(function (response) {
-    res.json(response);
-  }).catch(function (err) {
-    res.json(err)
-  });
+jwt.verify(req.token, 'secretkey', (err, authData) => {
+  if (err) {
+    res.sendStatus(403);
+  } else {
+
+    db.sequelize.query('CALL sp_allBatch();').then(function (response) {
+      res.json(response);
+    }).catch(function (err) {
+      res.json(err)
+    });
+
+  }
+})
+ 
 }
 // //get batch items
 // const getitems = (req, res) => {

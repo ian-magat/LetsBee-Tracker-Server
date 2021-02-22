@@ -24,7 +24,7 @@ app.use(cors());
     });
   })
   
-router.get('/',ItemsController.getAll)
+router.get('/',verifyToken,ItemsController.getAll)
 router.get('/api/item', ItemsController.getAllItems);
 router.get('/api/item/:ItemId', ItemsController.getItem);
 router.get('/api/getBatchItems/:batchNo',ItemsController.getItems);
