@@ -375,16 +375,16 @@ function saveSingle(req, res) {
 
  //get all batches
 const getAll = (req, res) => {
-  db.Items.findAll({
-    // group: ['batch_num'],
-   order: [
-     ['id', 'DESC'],
- ],
-  }).then(x => {
-     console.log(x);
-    res.send(x);
+//   db.Items.findAll({
+//     // group: ['batch_num'],
+//    order: [
+//      ['id', 'DESC'],
+//  ],
+//   }).then(x => {
+//      console.log(x);
+//     res.send(x);
      
-   }).catch(err => console.log('error' + err));
+//    }).catch(err => console.log('error' + err));
 
   db.sequelize.query('CALL sp_allBatch();').then(function (response) {
     res.json(response);
