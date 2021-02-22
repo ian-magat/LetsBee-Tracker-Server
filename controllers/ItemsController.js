@@ -591,42 +591,28 @@ const updateItemStatus = (req, res) => {
 
 //update Sent Status
 const updateSentStatus = (req, res) => {
-  jwt.verify(req.token, 'secretkey', (err, authData) => {
-    if (err) {
-      res.sendStatus(403);
-    } else {
-      db.Items.update({
-        isSent: '1',
-      }, {
-        where: {
-          clientTransactionNo: req.params.clientTrxNo
-        }
-      }).then(() => {
-        res.sendStatus(200);
-      }).catch(err => console.log(err));
-
+  db.Items.update({
+    isSent: '1',
+  }, {
+    where: {
+      clientTransactionNo: req.params.clientTrxNo
     }
-  })
+  }).then(() => {
+    res.sendStatus(200);
+  }).catch(err => console.log(err));
 }
 
 //reset Sent Status
 const updateSentStatusbyBatch = (req, res) => {
-  jwt.verify(req.token, 'secretkey', (err, authData) => {
-    if (err) {
-      res.sendStatus(403);
-    } else {
-      db.Items.update({
-        isSent: req.body.status,
-      }, {
-        where: {
-          batch_num: req.params.batchNo
-        }
-      }).then(() => {
-        res.sendStatus(200);
-      }).catch(err => console.log(err));
-
+  db.Items.update({
+    isSent: req.body.status,
+  }, {
+    where: {
+      batch_num: req.params.batchNo
     }
-  })
+  }).then(() => {
+    res.sendStatus(200);
+  }).catch(err => console.log(err));
 }
 
 module.exports = {
