@@ -210,6 +210,12 @@ const updateRecipient = (req, res) => {
 
 }
 
+const getSMSReferenceMessage = (req, res) => {
+  db.smsReference.findAll().then(x => {
+    res.send(x);
+   }).catch(err => console.log('error' + err));
+ }
+
 module.exports = {
   inboundSMS,
   deleteSMS,
@@ -219,5 +225,6 @@ module.exports = {
   getAll,
   getAllbyDate,
   deleteRecipient,
-  updateRecipient
+  updateRecipient,
+  getSMSReferenceMessage
 }

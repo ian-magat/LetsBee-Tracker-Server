@@ -59,6 +59,7 @@ router.post('/api/GetSMSbyDate',Controller.getAllbyDate)
 router.get('/api/inboundSMS',Controller.inboundSMS)
 router.get('/api/outboundSMS',Controller.outboundSMS)
 router.post('/api/sendSMS',verifyToken,Controller.sendSMS)
+router.get('/api/smsReference',Controller.getSMSReferenceMessage)
 
 
 router.delete('/api/deleteRider/:id',Controller.deleteSMS)
