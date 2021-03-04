@@ -8,10 +8,10 @@ const db = require("./models");
 const http = require('http');
 const socketIO = require('socket.io');
 
-db.sequelize.sync({force: true}).then(() => {
-  console.log('Drop and Resync Database with { force: true }');
-  initializeDB()
-});
+// db.sequelize.sync({force: true}).then(() => {
+//   console.log('Drop and Resync Database with { force: true }');
+//   initializeDB()
+// });
 
 
 let server = http.createServer(app);

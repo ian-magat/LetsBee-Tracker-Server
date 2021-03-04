@@ -104,7 +104,10 @@ const updateSelectedTemplate = (req, res) => {
           isSelected: 1
         },
       }).then(data => {
-
+        if (data === null) {
+          updateSelectedAnnouncement(res, req.params.id);
+          return;
+        }
         db.announcement.update({
           isSelected: 0,
         }, {
@@ -113,22 +116,24 @@ const updateSelectedTemplate = (req, res) => {
           }
         }).then(() => {
 
-          db.announcement.update({
-            isSelected: 1
-          }, {
-            where: {
-              id: req.params.id
-            }
-          }).then(() => {
-            res.sendStatus(200);
-          })
+          updateSelectedAnnouncement(res, req.params.id);
 
         }).catch(err => console.log(err));
-
       }).catch(err => res.send(err));
     }
   })
 
+}
+function updateSelectedAnnouncement(res, id) {
+  db.announcement.update({
+    isSelected: 1
+  }, {
+    where: {
+      id: id
+    }
+  }).then(() => {
+    res.sendStatus(200);
+  })
 }
 module.exports = {
   getAllAnnouncement,
