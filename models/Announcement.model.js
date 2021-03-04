@@ -10,6 +10,10 @@ module.exports = (sequelize, Sequelize) => {
       },
       value: {
         type: Sequelize.STRING
+      } ,
+      isSelected: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       } 
     }, {
         freezeTableName: true,

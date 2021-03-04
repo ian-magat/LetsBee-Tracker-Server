@@ -82,9 +82,59 @@ const deleteAnnouncement = (req, res) => {
 
 }
 
+const getSelectedTemplate = (req, res) => {
+  db.announcement.findOne({
+    where: {
+      isSelected: 1
+    },
+  }).then(data => {
+    res.send(data);
+  }).catch(err => res.send(err));
+}
+
+const updateSelectedTemplate = (req, res) => {
+
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+
+      db.announcement.findOne({
+        where: {
+          isSelected: 1
+        },
+      }).then(data => {
+
+        db.announcement.update({
+          isSelected: 0,
+        }, {
+          where: {
+            id: data.id
+          }
+        }).then(() => {
+
+          db.announcement.update({
+            isSelected: 1
+          }, {
+            where: {
+              id: req.params.id
+            }
+          }).then(() => {
+            res.sendStatus(200);
+          })
+
+        }).catch(err => console.log(err));
+
+      }).catch(err => res.send(err));
+    }
+  })
+
+}
 module.exports = {
   getAllAnnouncement,
   SaveAnnouncement,
   updateAnnouncement,
   deleteAnnouncement,
+  getSelectedTemplate,
+  updateSelectedTemplate
 }
