@@ -67,11 +67,18 @@ const updateAnnouncement = (req, res) => {
 
 }
 const deleteAnnouncement = (req, res) => {
-  db.announcement.destroy({
-    where: {
-      id: req.params.id
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      db.announcement.destroy({
+        where: {
+          id: req.params.id
+        }
+      }).then(() => res.sendStatus(200)).catch(err => console.log(err));
     }
-  }).then(() => res.sendStatus(200)).catch(err => console.log(err));
+  })
+
 
 }
 

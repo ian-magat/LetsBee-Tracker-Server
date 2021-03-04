@@ -80,7 +80,7 @@ router.post('/api/login',AuthController.login);
 router.get('/api/announcements', AnnouncementController.getAllAnnouncement);
 router.post('/api/saveAnnouncement',verifyToken,AnnouncementController.SaveAnnouncement);
 router.post('/api/updateAnnouncement/:id',verifyToken,AnnouncementController.updateAnnouncement);
-router.delete('/api/deleteAnnouncement/:id',AnnouncementController.deleteAnnouncement)
+router.delete('/api/deleteAnnouncement/:id',verifyToken,AnnouncementController.deleteAnnouncement)
 
 
 function verifyToken(req,res,next)
