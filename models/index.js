@@ -36,5 +36,6 @@ const sequelize = new Sequelize(
   db.Items = require("../models/Items.model")(sequelize, Sequelize);
   db.recipients = require("../models/recipients.model")(sequelize, Sequelize);
   db.smsReference = require("../models/SMSReference.model")(sequelize, Sequelize);
+  db.announcement = require("../models/Announcement.model")(sequelize, Sequelize);
 
   module.exports = db;

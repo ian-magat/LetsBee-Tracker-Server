@@ -8,6 +8,7 @@ const {validateUser} = require('../helper/validator');
 const upload = require('../services/file-upload');
 
 const ItemsController = require('../controllers/ItemsController');
+const AnnouncementController = require('../controllers/AnnouncementController');
 
 
 
@@ -75,6 +76,13 @@ router.delete('/api/deleteRecipient/:id',Controller.deleteRecipient)
 router.post('/api/updateRecipient/:id',verifyToken,Controller.updateRecipient);
 
 router.post('/api/login',AuthController.login);
+
+router.get('/api/announcements', AnnouncementController.getAllAnnouncement);
+router.post('/api/saveAnnouncement',verifyToken,AnnouncementController.SaveAnnouncement);
+router.post('/api/updateAnnouncement/:id',verifyToken,AnnouncementController.updateAnnouncement);
+router.delete('/api/deleteAnnouncement/:id',AnnouncementController.deleteAnnouncement)
+
+
 function verifyToken(req,res,next)
 {
   const bearerHeader = req.headers["authorization"];
