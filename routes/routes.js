@@ -82,7 +82,7 @@ router.post('/api/saveAnnouncement',verifyToken,AnnouncementController.SaveAnnou
 router.post('/api/updateAnnouncement/:id',verifyToken,AnnouncementController.updateAnnouncement);
 router.delete('/api/deleteAnnouncement/:id',verifyToken,AnnouncementController.deleteAnnouncement)
 router.get('/api/getSelectedTemplate', AnnouncementController.getSelectedTemplate);
-router.post('/api/updateSelectedTemplate/:id',verifyToken,AnnouncementController.updateSelectedTemplate);
+router.post('/api/updateSelectedTemplate/:id',AnnouncementController.updateSelectedTemplate);
 
 
 function verifyToken(req,res,next)

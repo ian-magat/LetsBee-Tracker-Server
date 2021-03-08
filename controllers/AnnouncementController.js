@@ -94,34 +94,27 @@ const getSelectedTemplate = (req, res) => {
 
 const updateSelectedTemplate = (req, res) => {
 
-  jwt.verify(req.token, 'secretkey', (err, authData) => {
-    if (err) {
-      res.sendStatus(403);
-    } else {
-
-      db.announcement.findOne({
-        where: {
-          isSelected: 1
-        },
-      }).then(data => {
-        if (data === null) {
-          updateSelectedAnnouncement(res, req.params.id);
-          return;
-        }
-        db.announcement.update({
-          isSelected: 0,
-        }, {
-          where: {
-            id: data.id
-          }
-        }).then(() => {
-
-          updateSelectedAnnouncement(res, req.params.id);
-
-        }).catch(err => console.log(err));
-      }).catch(err => res.send(err));
+  db.announcement.findOne({
+    where: {
+      isSelected: 1
+    },
+  }).then(data => {
+    if (data === null) {
+      updateSelectedAnnouncement(res, req.params.id);
+      return;
     }
-  })
+    db.announcement.update({
+      isSelected: 0,
+    }, {
+      where: {
+        id: data.id
+      }
+    }).then(() => {
+
+      updateSelectedAnnouncement(res, req.params.id);
+
+    }).catch(err => console.log(err));
+  }).catch(err => res.send(err));
 
 }
 function updateSelectedAnnouncement(res, id) {
