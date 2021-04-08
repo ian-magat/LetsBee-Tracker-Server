@@ -1,17 +1,16 @@
 const {check, validationResult} = require('express-validator');
 const express = require('express');
 const app = express();
-
-exports.validateUser = [
-    check('firstName')
-      .isEmpty()
-      .withMessage('first name can not be empty!')
-      .bail(),
-    (req, res, next) => {
-        console.log(req);
-      const errors = validationResult(req);
-      if (!errors.isEmpty())
-        return console.log(errors);
-      next();
-    },
-  ];
+const { body } = require('express-validator/check')
+exports.validate = (method) => {
+  switch (method) {
+    case 'calculateFee': {
+     return [ 
+        body('weight', 'weight doesnt exists').exists(),
+        body('length', 'length doesnt exists').exists(),
+        body('width', 'width doesnt exists').exists(),
+        body('height', 'height doesnt exists').exists(),
+       ]   
+    }
+  }
+}

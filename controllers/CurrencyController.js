@@ -9,7 +9,7 @@ const multerConfig = require("../config/multer");
 const path = require('path')
 const jwt = require('jsonwebtoken');
 var bcrypt = require("bcryptjs");
-
+const { validationResult } = require('express-validator/check');
 async function GetAllCurrency(req, res) {
   await db.currency.findAll().then(x => {
     res.status(200).json(x);
@@ -66,14 +66,18 @@ const UpdateCurrency = (req, res) => {
   })
 } 
 async function CalculateShippingFee(req, res) {
-  await db.currency.findOne().then(x => {
-    let peso = x.peso;
-    let won = x.won;
 
-    let weight = Math.ceil(req.body.weight);
-    let length  = req.body.length ;
-    let width  = req.body.width ;
-    let height = req.body.height;
+  const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
+
+  if (!errors.isEmpty()) {
+    res.status(422).json({ errors: errors.array() });
+    return;
+  }
+
+  await db.currency.findOne().then(x => {
+    const{peso,won} = x;
+    let {weight,length,width,height} = req.body;
+     weight = Math.ceil(weight);
 
     let feeByWeightPeso = weight * peso;
     let feeByWeightPesoSplit = feeByWeightPeso.toString().split(".");
@@ -101,9 +105,10 @@ async function CalculateShippingFee(req, res) {
   }).catch(err => console.log('error' + err));
 
 }
+
 module.exports = {
   GetAllCurrency,
   SaveCurrency,
   UpdateCurrency,
-  CalculateShippingFee
+  CalculateShippingFee 
 }

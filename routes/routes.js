@@ -4,7 +4,7 @@ const app = express();
 const Controller = require('../controllers/SMSController');
 const AuthController = require('../controllers/AuthController');
 const UserController = require('../controllers/UserController');
-const {validateUser} = require('../helper/validator');
+const {validate} = require('../helper/validator');
 const upload = require('../services/file-upload');
 
 const ItemsController = require('../controllers/ItemsController');
@@ -89,7 +89,7 @@ router.post('/api/updateSelectedTemplate/:id',AnnouncementController.updateSelec
 router.get('/api/currencies', CurrencyController.GetAllCurrency);
 router.post('/api/saveCurrencies',verifyToken,CurrencyController.SaveCurrency);
 router.post('/api/updateCurrencies',verifyToken,CurrencyController.UpdateCurrency);
-router.post('/api/CalculateShippingFee',CurrencyController.CalculateShippingFee);
+router.post('/api/CalculateShippingFee',validate('calculateFee'),CurrencyController.CalculateShippingFee);
 
 
 function verifyToken(req,res,next)
