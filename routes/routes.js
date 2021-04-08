@@ -9,6 +9,7 @@ const upload = require('../services/file-upload');
 
 const ItemsController = require('../controllers/ItemsController');
 const AnnouncementController = require('../controllers/AnnouncementController');
+const CurrencyController = require('../controllers/CurrencyController');
 
 
 
@@ -83,6 +84,12 @@ router.post('/api/updateAnnouncement/:id',verifyToken,AnnouncementController.upd
 router.delete('/api/deleteAnnouncement/:id',verifyToken,AnnouncementController.deleteAnnouncement)
 router.get('/api/getSelectedTemplate', AnnouncementController.getSelectedTemplate);
 router.post('/api/updateSelectedTemplate/:id',AnnouncementController.updateSelectedTemplate);
+
+// shipment calculator
+router.get('/api/currencies', CurrencyController.GetAllCurrency);
+router.post('/api/saveCurrencies',verifyToken,CurrencyController.SaveCurrency);
+router.post('/api/updateCurrencies',verifyToken,CurrencyController.UpdateCurrency);
+router.post('/api/CalculateShippingFee',CurrencyController.CalculateShippingFee);
 
 
 function verifyToken(req,res,next)

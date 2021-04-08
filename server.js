@@ -97,6 +97,11 @@ io.on('connection',(socket) =>{
        value: '고객님의 물품이 배송완료되었습니다.\nYour shipment is delivered successfully.'
      }
    ]);
+
+   db.currency.create({
+    peso: 540 ,
+    won: 13000,
+  })
  }
 
 console.log(__dirname + "/./public")
