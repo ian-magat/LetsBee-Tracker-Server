@@ -10,6 +10,8 @@ const path = require('path')
 const jwt = require('jsonwebtoken');
 var bcrypt = require("bcryptjs");
 const { validationResult } = require('express-validator/check');
+
+
 async function GetAllCurrency(req, res) {
   await db.currency.findAll().then(x => {
     res.status(200).json(x);
@@ -64,7 +66,7 @@ const UpdateCurrency = (req, res) => {
 
     }
   })
-} 
+}
 async function CalculateShippingFee(req, res) {
 
   const errors = validationResult(req); // Finds the validation errors in this request and wraps them in an object with handy functions
@@ -75,9 +77,9 @@ async function CalculateShippingFee(req, res) {
   }
 
   await db.currency.findOne().then(x => {
-    const{peso,won} = x;
-    let {weight,length,width,height} = req.body;
-     weight = Math.ceil(weight);
+    let { peso, won } = x;
+    let { weight, length, width, height } = req.body;
+    weight = Math.ceil(weight);
 
     let feeByWeightPeso = weight * peso;
     let feeByWeightPesoSplit = feeByWeightPeso.toString().split(".");
@@ -91,15 +93,14 @@ async function CalculateShippingFee(req, res) {
 
     if (feeByWeightPeso > feeBySizePeso) {
       res.status(200).json({
-        "Shipping fee (Ph Peso)":feeByWeightPesoSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-        "Shipping fee (Kor Won)":feeByWeightWonSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        "Shipping fee (Ph Peso)": feeByWeightPesoSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        "Shipping fee (Kor Won)": feeByWeightWonSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       });
     }
-    else
-    {
+    else {
       res.status(200).json({
-        "Shipping fee (Ph Peso)":feeBySizePesoSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-        "Shipping fee (Kor Won)":feeBySizeWonSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        "Shipping fee (Ph Peso)": feeBySizePesoSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        "Shipping fee (Kor Won)": feeBySizeWonSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       });
     }
   }).catch(err => console.log('error' + err));
@@ -110,5 +111,5 @@ module.exports = {
   GetAllCurrency,
   SaveCurrency,
   UpdateCurrency,
-  CalculateShippingFee 
+  CalculateShippingFee
 }
