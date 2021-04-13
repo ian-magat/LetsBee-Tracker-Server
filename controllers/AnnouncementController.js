@@ -89,7 +89,9 @@ const getSelectedTemplate = (req, res) => {
     },
   }).then(data => {
     res.send(data);
-  }).catch(err => res.send(err));
+  }).catch(err =>  res.status(500).json({
+    "status_code" : 500
+  }));
 }
 
 const updateSelectedTemplate = (req, res) => {
