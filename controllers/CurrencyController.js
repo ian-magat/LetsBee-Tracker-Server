@@ -103,7 +103,9 @@ async function CalculateShippingFee(req, res) {
         "Shipping fee (Kor Won)": feeBySizeWonSplit[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       });
     }
-  }).catch(err => console.log('error' + err));
+  }).catch(err =>  res.status(200).json({
+    "status_code" : 500
+  }));
 
 }
 
