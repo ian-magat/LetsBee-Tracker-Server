@@ -41,6 +41,7 @@ router.get('/api/getTrxInfo/:trxNo',ItemsController.getTrxInfo);
 router.get('/api/getTrxLastNo/:batchNo',ItemsController.getTrxLastNo);
 router.post('/api/updateItemStatus/:clientTrxNo',ItemsController.updateItemStatus);
 router.post('/api/updateSentStatusbyBatch/:batchNo',ItemsController.updateSentStatusbyBatch);
+router.get('/api/generateTrxNumber', ItemsController.generateTrxNumber);
 
 router.get('/api/allRecipient', ItemsController.getAllRecipient);
 

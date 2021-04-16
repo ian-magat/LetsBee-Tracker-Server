@@ -58,7 +58,12 @@ module.exports = (sequelize, Sequelize) => {
       isSent: {
           type: Sequelize.STRING,
           defaultValue: '0'
-      }
+      },
+      hasItem: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+    },
+      
     }, {
         freezeTableName: true,
         timestamps: false,

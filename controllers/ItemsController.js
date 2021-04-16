@@ -250,17 +250,63 @@ const deleteItem = (req, res) => {
 
 function saveBulkItems(req, res) {
 
+
   let data = req.body;
   data.forEach(val => {
    //save mobile no if not exist
    checkandSaveMobileIfExist(val.phone_number, val.receiver);
 });
 
-  db.Items.bulkCreate(data).then(() => { // Notice: There are no arguments here, as of right now you'll have to...
-    res.sendStatus(200);
-  }).then(Items => {
-    console.log(Items) // ... in order to get the array of user objects
-  })
+  let limits = data.length;
+  db.Items.findAll({
+    limit: limits,
+    where: {
+            hasItem: 0
+          },
+  }).then(x => {
+     
+    for (var i = 0; i <limits; i++) {
+       let trxNo = x[i].clientTransactionNo;
+       data[i].clientTransactionNo = trxNo;
+    }
+
+    for (var i = 0; i <limits; i++) {
+      db.Items.update({
+        item_no: data[i].item_no,
+        sender: data[i].sender,
+        sender_payment: data[i].sender_payment,
+        receiver: data[i].receiver,
+        receiver_payment: data[i].receiver_payment,
+        phone_number: data[i].phone_number,
+        declared_item: data[i].declared_item,
+        weight: data[i].weight,
+        dimensions: data[i].dimensions,
+        quantity: data[i].quantity,
+        tracking_num: data[i].tracking_num,
+        batch_num: data[i].batch_num,
+        trxTimeStamp: data[i].trxTimeStamp,
+        isDelivered:data[i].isDelivered,
+        hasItem: 1
+      }, {
+        where: {
+          clientTransactionNo: data[i].clientTransactionNo
+        }
+      }).then(() => {
+        res.sendStatus(200);
+      }).catch(err => console.log(err));
+
+   }
+    
+
+   }).catch(err => console.log('error' + err));
+
+
+
+  // db.Items.bulkCreate(data).then(() => { // Notice: There are no arguments here, as of right now you'll have to...
+  //   res.sendStatus(200);
+  // }).then(Items => {
+  //   console.log(Items) // ... in order to get the array of user objects
+  // })
 
 }
 
@@ -330,7 +376,7 @@ function saveSingle(req, res) {
       }).then(val => {
         trxTimeStamp = val === null ? trxTimeStamp : `${val.trxTimeStamp}`
 
-        db.Items.create({
+        db.Items.update({
           item_no: item_no,
           sender: sender,
           sender_payment: sender_payment,
@@ -343,16 +389,16 @@ function saveSingle(req, res) {
           quantity: quantity,
           tracking_num: tracking_num,
           batch_num: batch_num,
-          clientTransactionNo: clientTransactionNo,
           trxTimeStamp: trxTimeStamp,
-          isDelivered:isDelivered
-        })
-          .then(() => {
-            res.sendStatus(200)
-          })
-          .catch(err => {
-            console.log(err)
-          });
+          isDelivered:isDelivered,
+          hasItem: 1
+        }, {
+          where: {
+            clientTransactionNo: clientTransactionNo
+          }
+        }).then(() => {
+          res.sendStatus(200);
+        }).catch(err => console.log(err));
 
       }).catch(err =>
         res.send(err)
@@ -418,9 +464,10 @@ jwt.verify(req.token, 'secretkey', (err, authData) => {
 
 //get batch items
 const getAllItems = (req, res) => {
-  db.Items.findAll()
+  db.Items.findAll({
+    where: { hasItem: 1 }
+  })
     .then((data) => res.send(data))
-
 }
 //get All Recipient
 const getAllRecipient = (req, res) => {
@@ -441,10 +488,6 @@ const getItem = (req, res) => {
 // POST Item
 // Add Item
 const postAddItem = (req, res, next) => {
-
-
-
-
   let {
     item_no,
     sender,
@@ -490,6 +533,13 @@ const getEditItem = (req, res, next) => {
   db.Items.findAll({ where: { id: req.params.ItemId } })
     .then((item) => res.send(item))
     .catch((err) => console.log(err));
+};
+
+const generateTrxNumber = (req, res, next) => {
+  // const itemId = req.params.ItemId;
+  db.Items.findOne({ where: { hasItem: 0 } })
+    .then((item) => res.json({"trxNo":item.clientTransactionNo}))
+    .catch((err) => res.json({"error":500}));
 };
 
 // POST edit item
@@ -650,5 +700,6 @@ module.exports = {
   updateStatus,
   updateItemStatus,
 
-  getAllRecipient
+  getAllRecipient,
+  generateTrxNumber
 }

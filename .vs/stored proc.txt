@@ -1,10 +1,11 @@
 
 //GET ALL BATCHES 
 
+drop procedure if exists sp_allBatch;
 DELIMITER //
 CREATE PROCEDURE sp_allBatch()
 BEGIN
-SELECT `id`,`batch_num`,`current_location`,(SELECT COUNT(*) FROM tblitems WHERE batch_num = i.batch_num) batch_qty FROM tblitems i GROUP BY i.batch_num ORDER BY id DESC;
+SELECT `id`,`batch_num`,`current_location`,(SELECT COUNT(*) FROM tblitems WHERE batch_num = i.batch_num) batch_qty FROM tblitems i WHERE hasItem = 1 GROUP BY i.batch_num ORDER BY id DESC;
 END //
 DELIMITER ;
 
@@ -49,3 +50,19 @@ BEGIN
   );
 END //
 DELIMITER ;
+
+
+//GENERATE TRX NUMBER//
+
+drop procedure if exists sp_generate_trx_number;
+DELIMITER //  
+CREATE PROCEDURE sp_generate_trx_number(
+IN p_i INT)   
+BEGIN
+DECLARE i INT DEFAULT 0; 
+WHILE (i <= p_i) DO
+    INSERT INTO tblitems (clientTransactionNo) VALUES (LPAD(FLOOR(RAND() * 9999999), 7, '0'));
+    SET i = i+1;
+END WHILE;
+END;
+//

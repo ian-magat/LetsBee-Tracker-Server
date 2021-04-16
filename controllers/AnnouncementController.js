@@ -107,6 +107,7 @@ const updateSelectedTemplate = (req, res) => {
     }
     db.announcement.update({
       isSelected: 0,
+      
     }, {
       where: {
         id: data.id
