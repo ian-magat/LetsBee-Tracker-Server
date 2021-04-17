@@ -674,6 +674,23 @@ const updateSentStatusbyBatch = (req, res) => {
   }).catch(err => console.log(err));
 }
 
+
+  const generateTransactionNo = (req, res) => {
+  jwt.verify(req.token, 'secretkey', (err, authData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+      let rowToGenerate = req.body.rows - 1;
+      db.sequelize.query(`CALL sp_generate_trx_number(${rowToGenerate})`).then(function (data) {
+        res.sendStatus(200).json({"status":"ok"});
+      }).catch(function (err) {
+        res.json(err)
+      });
+    }
+  })
+
+}
+
 module.exports = {
   getAll,
   getItems,
@@ -701,5 +718,6 @@ module.exports = {
   updateItemStatus,
 
   getAllRecipient,
-  generateTrxNumber
+  generateTrxNumber,
+  generateTransactionNo
 }
